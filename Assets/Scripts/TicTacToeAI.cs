@@ -36,6 +36,8 @@ public class TicTacToeAI : MonoBehaviour
     private GameObject _oPrefab;
 
     public UnityEvent onGameStarted;
+    public Action onAITurnStart;
+    public Action onAITurnEnd;
 
     //Call This event with the player number to denote the winner
     public WinnerEvent onPlayerWin;
@@ -93,6 +95,7 @@ public class TicTacToeAI : MonoBehaviour
 
     IEnumerator StartAITurn()
     {
+        onAITurnStart?.Invoke();
         yield return new WaitForSeconds(0.5f);
         _isPlayerTurn = false;
         ClickTrigger clickTrigger = CalculateBestMove();
@@ -104,6 +107,8 @@ public class TicTacToeAI : MonoBehaviour
         {
             onPlayerWin.Invoke(-1);
         }
+        yield return new WaitForSeconds(0.5f);
+        onAITurnEnd?.Invoke();
     }
 
     private void UpdateBoardState(int coordX, int coordY, TicTacToeState state)
